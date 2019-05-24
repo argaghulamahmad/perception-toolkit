@@ -15,37 +15,10 @@
  * limitations under the License.
  */
 
+import { captureClosed, captureFrame, captureStarted, captureStopped } from '../../events.js';
 import { clamp } from '../../utils/clamp.js';
 import { fire } from '../../utils/fire.js';
 import { html, styles } from './stream-capture.template.js';
-
-/**
- * The name for captured frame events.
- *
- * @hidden
- */
-export const frameEvent = 'pt.captureframe';
-
-/**
- * The name for start capture events.
- *
- * @hidden
- */
-export const captureStarted = 'pt.capturestarted';
-
-/**
- * The name for stop capture events.
- *
- * @hidden
- */
-export const captureStopped = 'pt.capturestopped';
-
-/**
- * The name for stop capture events.
- *
- * @hidden
- */
-export const closeEvent = 'pt.captureclose';
 
 /**
  * Provides an element that abstracts the capture of stream frames. For example,
@@ -86,7 +59,7 @@ export class StreamCapture extends HTMLElement {
    * The sample scale, intended to go between `0` and `1` (though clamped only
    * to `0` in case you wish to sample at a larger scale).
    */
-  captureScale = 0.5;
+  captureScale = 1;
 
   /**
    * How often to capture the stream in ms, where `0` represents never.
@@ -130,7 +103,7 @@ export class StreamCapture extends HTMLElement {
         return;
       }
 
-      fire(closeEvent, this);
+      fire(captureClosed, this);
     });
   }
 
@@ -236,7 +209,7 @@ export class StreamCapture extends HTMLElement {
         imgData.src = canvas.toDataURL('image/png');
         imgData.onload = () => {
           if (this.captureRate !== 0) {
-            fire(frameEvent, this, {imgData});
+            fire(captureFrame, this, {imgData});
           }
 
           resolve(imgData);
@@ -244,7 +217,7 @@ export class StreamCapture extends HTMLElement {
       } else {
         imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         if (this.captureRate !== 0) {
-          fire(frameEvent, this, {imgData});
+          fire(captureFrame, this, {imgData});
         }
 
         resolve(imgData);

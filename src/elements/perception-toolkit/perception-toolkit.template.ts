@@ -15,26 +15,9 @@
  * limitations under the License.
  */
 
-export {
-  captureStarted,
-  captureStopped,
-  closeEvent as captureClosed
-} from '../src/elements/stream-capture/stream-capture.js';
+import { StreamCapture } from '../stream-capture/stream-capture.js';
 
-/**
- * Exposed through bootstrap.
- * @hidden
- */
-export const markerDetect = 'pt.markerdetect';
+export const styles = ``;
 
-/**
- * Exposed through bootstrap.
- * @hidden
- */
-export const cameraAccessDenied = 'pt.cameraaccessdenied';
-
-/**
- * Exposed through bootstrap.
- * @hidden
- */
-export const perceivedResults = 'pt.perceivedresults';
+export const html = `
+  <${StreamCapture.defaultTagName}></${StreamCapture.defaultTagName}`;

@@ -23,8 +23,14 @@ export const styles = `
   height: 100%;
   overflow: hidden;
   background: #333;
-  animation: fadeIn 0.3s cubic-bezier(0, 0, 0.3, 1) forwards;
   --baseline: 12px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+:host(.active) {
+  animation: fadeIn 0.3s cubic-bezier(0, 0, 0.3, 1) forwards;
+  pointer-events: auto;
 }
 
 canvas {
@@ -77,6 +83,16 @@ canvas {
   transform: translateX(-50%);
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 `;
 

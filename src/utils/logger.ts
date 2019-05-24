@@ -74,7 +74,7 @@ declare const DEBUG: DEBUG_LEVEL;
  */
 export function log(msg: any, level: DEBUG_LEVEL = DEBUG_LEVEL.INFO,
                     tag?: string) {
-  if (typeof DEBUG === 'undefined' || level > DEBUG) {
+  if (typeof DEBUG === 'undefined' || toNum(level) > toNum(DEBUG)) {
     return;
   }
 
@@ -91,6 +91,16 @@ export function log(msg: any, level: DEBUG_LEVEL = DEBUG_LEVEL.INFO,
     default:
       console.log(label, msg);
       break;
+  }
+}
+
+function toNum(level: DEBUG_LEVEL) {
+  switch (level) {
+    case DEBUG_LEVEL.VERBOSE: return 0;
+    case DEBUG_LEVEL.INFO: return 1;
+    case DEBUG_LEVEL.WARNING: return 2;
+    case DEBUG_LEVEL.ERROR: return 3;
+    case DEBUG_LEVEL.NONE: return 4;
   }
 }
 

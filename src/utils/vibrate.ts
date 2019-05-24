@@ -23,5 +23,9 @@ export function vibrate(pattern: number | number[] = 200) {
     return;
   }
 
-  navigator.vibrate(pattern);
+  try {
+    navigator.vibrate(pattern);
+  } catch (e) {
+    // This may fail because the user has not tapped. Just swallow the error.
+  }
 }

@@ -35,7 +35,7 @@ export function flatPolyfill<U>(arr: any[], depth?: number): any[] {
 }
 
 /* istanbul ignore next */
-export function flat<U = {}>(arr: U[], depth?: number): U[] {
+export function flat<U = {}>(arr: U[][], depth?: number): U[] {
   if ('flat' in Array.prototype) {
     return arr.flat(depth);
   } else {

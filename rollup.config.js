@@ -20,13 +20,11 @@ import loadz0r from './build/dynamic-loader/index.js';
 import { terser } from 'rollup-plugin-terser';
 import license from 'rollup-plugin-license';
 
-
 export default [{
   input: [
     'perception-toolkit/bootstrap.ts',
     'perception-toolkit/loader.ts',
     'perception-toolkit/main.ts',
-    'perception-toolkit/meaning-maker.ts',
     'perception-toolkit/onboarding.ts',
   ],
   plugins: [

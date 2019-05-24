@@ -46,6 +46,10 @@ class Detector {
   }
 
   detect(data: ImageData): Promise<Marker[]> {
+    if (this.targets.size === 0) {
+      return Promise.resolve([]);
+    }
+
     return new Promise((resolve) => {
       const startTime = performance.now();
       this.worker.postMessage({ type: 'process', data });

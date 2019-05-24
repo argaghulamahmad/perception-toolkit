@@ -15,17 +15,25 @@
  * limitations under the License.
  */
 
-/**
- * A convenience function for firing custom events.
- *
- * ```javascript
- * fire('eventname', someElement, {foo: 'bar'});
- * ```
- */
-export function fire(name: string, target: HTMLElement | Window, detail?: {}) {
-  const opts = { bubbles: true, detail, composed: true };
-  const evt = new CustomEvent<typeof detail>(name, opts);
-  target.dispatchEvent(evt);
 
-  return evt;
+import { hideOverlay, showOverlay } from '../elements/overlay/overlay.js';
+
+/**
+ * Handles connectivity change for the user.
+ */
+function onConnectivityChanged() {
+  if (!navigator.onLine) {
+    showOverlay('Currently offline. Please reconnect to the network.');
+  } else {
+    hideOverlay();
+  }
+}
+
+
+export function observeConnectivityChanges() {
+  window.addEventListener('offline', onConnectivityChanged);
+}
+
+export function unobserveConnectivityChanges() {
+  window.addEventListener('online', onConnectivityChanged);
 }

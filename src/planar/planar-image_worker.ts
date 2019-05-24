@@ -24,9 +24,9 @@ declare global {
   function ModuleFactory(seed: {}): PlanarTargetWasmModule;
 }
 
-enableLogLevel(DEBUG_LEVEL.WARNING);
+enableLogLevel(DEBUG_LEVEL.VERBOSE);
 
-let addCount = 1010;
+let addCount = 2010;
 let detector: PlanarTargetDetector;
 self.onmessage = (e: MessageEvent) => {
   // Initializing.
@@ -46,6 +46,8 @@ self.onmessage = (e: MessageEvent) => {
         },
 
         onRuntimeInitialized() {
+          // Run a fake image here to boot the graph.
+          detector.process(new ImageData(1, 1), Date.now());
           (self as any).postMessage('ready');
         }
       };

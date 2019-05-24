@@ -16,16 +16,12 @@
  */
 
 /**
- * A convenience function for firing custom events.
- *
- * ```javascript
- * fire('eventname', someElement, {foo: 'bar'});
- * ```
+ * Registers a custom element, ensuring it is not double-defined.
  */
-export function fire(name: string, target: HTMLElement | Window, detail?: {}) {
-  const opts = { bubbles: true, detail, composed: true };
-  const evt = new CustomEvent<typeof detail>(name, opts);
-  target.dispatchEvent(evt);
+export function defineElement<T extends {}>(name: string, base: T) {
+  if (customElements.get(name)) {
+    return;
+  }
 
-  return evt;
+  customElements.define(name, base as {} as () => void);
 }
