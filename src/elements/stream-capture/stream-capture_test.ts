@@ -23,8 +23,9 @@ declare global {
 
 const { assert } = chai;
 
+import { captureFrame, captureStarted, captureStopped } from '../../events.js';
 import { isImageData } from '../../utils/is-image-data.js';
-import { captureStarted, captureStopped, frameEvent, StreamCapture } from './stream-capture.js';
+import { StreamCapture } from './stream-capture.js';
 customElements.define(StreamCapture.defaultTagName, StreamCapture);
 
 const width = 400;
@@ -121,7 +122,7 @@ describe('StreamCapture', function() {
     capture.start(stream);
     capture.captureRate = 100;
 
-    capture.addEventListener(frameEvent, (evt) => {
+    capture.addEventListener(captureFrame, (evt) => {
       const { detail } = evt as CustomEvent<{imgData: ImageData}>;
       const { imgData } = detail;
 
@@ -138,33 +139,12 @@ describe('StreamCapture', function() {
     capture.capturePng = true;
     capture.captureRate = 100;
 
-    capture.addEventListener(frameEvent, (evt) => {
+    capture.addEventListener(captureFrame, (evt) => {
       const { detail } = evt as CustomEvent<{imgData: HTMLImageElement}>;
       const { imgData } = detail;
 
       assert.equal(imgData.naturalWidth, width * capture.captureScale);
       assert.equal(imgData.naturalHeight, height * capture.captureScale);
-
-      done();
-    });
-  });
-
-  it('flips the capture if necessary', (done) => {
-    capture.flipped = true;
-    capture.start(stream);
-
-    capture.addEventListener(captureStarted, async () => {
-      const imgData = await capture.captureFrame();
-      assert.equal(imgData.width, width * capture.captureScale);
-      assert.equal(imgData.height, height * capture.captureScale);
-
-      if (isImageData(imgData)) {
-        // Right hand side is green, so confirm the G and R components.
-        assert.isBelow(imgData.data[0], 5);
-        assert.isAbove(imgData.data[1], 250);
-      } else {
-        assert.fail('Expected image data');
-      }
 
       done();
     });
