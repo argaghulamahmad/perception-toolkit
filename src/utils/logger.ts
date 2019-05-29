@@ -20,29 +20,29 @@
  */
 export enum DEBUG_LEVEL {
   /**
-   * All messages.
+   * No messages.
    */
-  VERBOSE = 'verbose',
-
-  /**
-   * Info.
-   */
-  INFO = 'info',
-
-  /**
-   * Warnings.
-   */
-  WARNING = 'warning',
+  NONE,
 
   /**
    * Errors.
    */
-  ERROR = 'error',
+  ERROR,
 
   /**
-   * No messages.
+   * Warnings.
    */
-  NONE = 'none'
+  WARNING,
+
+  /**
+   * Info.
+   */
+  INFO,
+
+  /**
+   * All messages.
+   */
+  VERBOSE,
 }
 
 /**
@@ -50,6 +50,15 @@ export enum DEBUG_LEVEL {
  */
 export function enableLogLevel(level: DEBUG_LEVEL) {
   (self as any).DEBUG = level;
+}
+export function enableLogLevelFromString(level: string) {
+  switch (level) {
+    case 'verbose': return enableLogLevel(DEBUG_LEVEL.VERBOSE);
+    case 'info': return enableLogLevel(DEBUG_LEVEL.INFO);
+    case 'warning': return enableLogLevel(DEBUG_LEVEL.WARNING);
+    case 'error': return enableLogLevel(DEBUG_LEVEL.ERROR);
+    default: return enableLogLevel(DEBUG_LEVEL.NONE);
+  }
 }
 
 declare const DEBUG: DEBUG_LEVEL;
@@ -74,7 +83,7 @@ declare const DEBUG: DEBUG_LEVEL;
  */
 export function log(msg: any, level: DEBUG_LEVEL = DEBUG_LEVEL.INFO,
                     tag?: string) {
-  if (typeof DEBUG === 'undefined' || toNum(level) > toNum(DEBUG)) {
+  if (typeof DEBUG === 'undefined' || level > DEBUG) {
     return;
   }
 
@@ -91,16 +100,6 @@ export function log(msg: any, level: DEBUG_LEVEL = DEBUG_LEVEL.INFO,
     default:
       console.log(label, msg);
       break;
-  }
-}
-
-function toNum(level: DEBUG_LEVEL) {
-  switch (level) {
-    case DEBUG_LEVEL.VERBOSE: return 0;
-    case DEBUG_LEVEL.INFO: return 1;
-    case DEBUG_LEVEL.WARNING: return 2;
-    case DEBUG_LEVEL.ERROR: return 3;
-    case DEBUG_LEVEL.NONE: return 4;
   }
 }
 

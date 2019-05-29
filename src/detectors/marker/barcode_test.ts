@@ -53,7 +53,7 @@ describe('BarcodeDetector', () => {
         context: barcodeSpy as any, forceNewDetector: true
     });
 
-    assert.deepEqual(barcodes, [{rawValue: 'foo', format: 'qr_code'}]);
+    assert.deepEqual(barcodes, [{value: 'foo', type: 'qr_code'}]);
     assert(barcodeSpy.BarcodeDetector.called);
   });
 

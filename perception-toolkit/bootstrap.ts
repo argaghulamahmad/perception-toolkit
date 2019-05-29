@@ -28,7 +28,7 @@ import { DeviceSupport } from '../src/support/device-support.js';
 import { GetUserMediaSupport } from '../src/support/get-user-media.js';
 import { WasmSupport } from '../src/support/wasm.js';
 import { fire } from '../src/utils/fire.js';
-import { DEBUG_LEVEL, enableLogLevel } from '../src/utils/logger.js';
+import { enableLogLevelFromString } from '../src/utils/logger.js';
 import { PerceptionToolkit } from './defs.js';
 
 declare global {
@@ -39,7 +39,7 @@ declare global {
 
 const deviceNotSupported = 'pt.devicenotsupported';
 
-window.PerceptionToolkit = window.PerceptionToolkit || {};
+window.PerceptionToolkit = window.PerceptionToolkit || {} as PerceptionToolkit;
 window.PerceptionToolkit.config = window.PerceptionToolkit.config || {};
 
 // Expose events.
@@ -71,27 +71,7 @@ if (window.PerceptionToolkit.config.onload) {
   window.PerceptionToolkit.config.onload.call(null);
 }
 
-switch (window.PerceptionToolkit.config.debugLevel) {
-  case DEBUG_LEVEL.VERBOSE:
-    enableLogLevel(DEBUG_LEVEL.VERBOSE);
-    break;
-
-  case DEBUG_LEVEL.INFO:
-    enableLogLevel(DEBUG_LEVEL.INFO);
-    break;
-
-  case DEBUG_LEVEL.WARNING:
-    enableLogLevel(DEBUG_LEVEL.WARNING);
-    break;
-
-  case DEBUG_LEVEL.NONE:
-    enableLogLevel(DEBUG_LEVEL.NONE);
-    break;
-
-  default:
-    enableLogLevel(DEBUG_LEVEL.ERROR);
-    break;
-}
+enableLogLevelFromString(window.PerceptionToolkit.config.debugLevel || 'error');
 
 /**
  * Perform a device support test, then load the loader & onboarding.

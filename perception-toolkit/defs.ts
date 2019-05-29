@@ -100,7 +100,7 @@ export interface PerceptionToolkitConfig {
    * * `verbose`: All.
    * * `none`: None.
    */
-  debugLevel?: DEBUG_LEVEL;
+  debugLevel?: 'error' | 'warning' | 'info' | 'verbose' | 'none';
 
   /**
    * Which detection mode to use:

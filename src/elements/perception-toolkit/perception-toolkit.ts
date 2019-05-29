@@ -18,6 +18,12 @@
 import { html, styles } from './perception-toolkit.template.js';
 
 import { Marker } from '../../../defs/marker.js';
+import {
+  PerceptionToolkitConfig,
+  PerceptionToolkitElements,
+  PerceptionToolkitEvents,
+  PerceptionToolkitFunctions,
+} from '../../../perception-toolkit/defs.js';
 import { NearbyResult, NearbyResultDelta } from '../../artifacts/artifact-dealer.js';
 import { detectBarcodes } from '../../detectors/marker/barcode.js';
 import { addDetectionTarget, detectPlanarImages, getTarget } from '../../detectors/planar-image/planar-image.js';
@@ -36,7 +42,13 @@ import { OnboardingCard } from '../onboarding-card/onboarding-card.js';
 import { hideOverlay, showOverlay } from '../overlay/overlay.js';
 import { StreamCapture } from '../stream-capture/stream-capture.js';
 
-window.PerceptionToolkit = window.PerceptionToolkit || {};
+window.PerceptionToolkit = window.PerceptionToolkit || {
+  Elements: {} as PerceptionToolkitElements,
+  Events: {} as PerceptionToolkitEvents,
+  Functions: {} as PerceptionToolkitFunctions,
+  config: {} as PerceptionToolkitConfig,
+};
+
 const {
   acknowledgeUnknownItems = true,
   artifactSources = [],
@@ -440,7 +452,7 @@ export class PerceptionToolkit extends HTMLElement {
     }
 
     const detectorOutcomes = await Promise.all(detectionTasks);
-    const targets = flat(detectorOutcomes, 1);
+    const targets = flat(detectorOutcomes, 1) as Marker[];
     for (const target of targets) {
       const targetAlreadyDetected = this.detectedTargets.has(target);
 

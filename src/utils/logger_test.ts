@@ -25,16 +25,17 @@ describe('log', () => {
   let consoleWarnSpy: sinon.SinonSpy;
   let consoleErrorSpy: sinon.SinonSpy;
   beforeEach(() => {
+    enableLogLevel(DEBUG_LEVEL.NONE);
     consoleLogSpy = spy(console, 'log');
     consoleWarnSpy = spy(console, 'warn');
     consoleErrorSpy = spy(console, 'error');
   });
 
   afterEach(() => {
+    enableLogLevel(DEBUG_LEVEL.NONE);
     consoleLogSpy.restore();
     consoleWarnSpy.restore();
     consoleErrorSpy.restore();
-    enableLogLevel(DEBUG_LEVEL.NONE);
   });
 
   it('ignores logs by default', async () => {
@@ -59,9 +60,9 @@ describe('log', () => {
     log('foo', DEBUG_LEVEL.INFO);
     log('foo', DEBUG_LEVEL.WARNING);
     log('foo', DEBUG_LEVEL.ERROR);
-    assert.isTrue(consoleLogSpy.called);
-    assert.isTrue(consoleWarnSpy.called);
-    assert.isTrue(consoleErrorSpy.called);
+    assert.isTrue(consoleLogSpy.called, 'Info was not called');
+    assert.isTrue(consoleWarnSpy.called, 'Warn was not called');
+    assert.isTrue(consoleErrorSpy.called, 'Error was not called');
   });
 
   it('does not tag the message', async () => {
