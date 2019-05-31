@@ -1,4 +1,4 @@
-# Advanced Config Demo
+    # Advanced Config Demo
 
 This demo showcases a few more advanced configuration options for Perception Toolkit in [`index.html`](./index.html).
 
