@@ -69,10 +69,26 @@
       ],
       
       // Sources from which to load AR ARtifacts.  Will load after Perception init.
-      artifactSources: [
-        './pages/barcode.html',
-        './pages/lighthouse.html'
-      ],
+      // artifactSources: [
+      //   './pages/barcode.html',
+      //   './pages/lighthouse.html'
+      // ],
+      artifactSources: [],
+
+      // For URLs which are discovered, but which are not in `sitemapUrl` (above), should we attempt to fetch?
+      // Note: This function gets called with each discovered URL-based Marker (such as a qr code).  If it returns
+      // `true`, the toolkit will attempt to fetch and discover ARArtifacts.  The Page must still contain a valid
+      // ARArtifact, with an appropriate `arTarget`.
+      shouldLoadArtifactsFrom(url) {
+        switch (url.origin) {
+          case 'http://localhost:8080':
+          case 'http://localhost:8081':
+            return true;
+
+          default:
+            return false;
+        }
+      }
     };
   </script>
   <script src="/lib/bundled/bootstrap.js"></script>
