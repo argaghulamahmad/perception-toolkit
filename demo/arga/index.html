@@ -170,16 +170,21 @@
                     card.src = found[0].content;
                     cardContainer.appendChild(card);
 
-                    /*
+
                     // Dig In here.  Customize the Card UI yourself!
                     const button = new Elements.ActionButton();
-                    button.label = 'Share';
+                    button.label = 'Find on Tokopedia';
                     button.addEventListener('click', () => {
-                      console.log('clicked');
-                      card.close();
-                    })
+                        console.log(found);
+                        console.log('clicked');
+                        let url = "https://www.tokopedia.com/search?st=product&q=";
+                        let productName = found[0].content.name;
+                        let searchUrl = url + productName;
+                        window.open(searchUrl,'_blank');
+                        card.close();
+                    });
                     card.appendChild(button);
-                    */
+
 
                     return;
                 }
