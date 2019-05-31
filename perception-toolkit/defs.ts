@@ -166,7 +166,7 @@ export interface PerceptionToolkitConfig {
    *
    * Example (html pages):
    * ```
-   * artifactSources: [ 'products/one.html', 'products/two.html' ]
+   * artifactSources: [ 'products-qr/one.html', 'products-qr/two.html' ]
    * ```
    *
    * Example (json-ld):

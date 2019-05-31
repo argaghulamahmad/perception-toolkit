@@ -1,0 +1,97 @@
+[
+  {
+    "@context": "https://schema.googleapis.com/",
+    "@type": "ARArtifact",
+    "arTarget": {
+      "@type": "Barcode",
+      "text": "012345678912"
+    },
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-barcode/product1.html",
+      "name": "Product 1",
+      "description": "This is a product with a barcode",
+      "image": "http://localhost:8080/demo/arga/products-barcode/product1.png"
+    }
+  },
+
+  {
+    "@context": "https://schema.googleapis.com/",
+    "@type": "ARArtifact",
+    "arTarget": {
+      "@type": "Barcode",
+      "text": "012345678929"
+    },
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-barcode/product2.html",
+      "name": "Product 2",
+      "description": "This is a product with a barcode",
+      "image": "http://localhost:8080/demo/arga/products-barcode/product2.png"
+    }
+  },
+  
+  {
+    "@context": "https://schema.googleapis.com/",
+    "@type": "ARArtifact",
+    "arTarget": {
+      "@type": "Barcode",
+      "text": "012345678936"
+    },
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-barcode/product3.html",
+      "name": "Product 3",
+      "description": "This is a product with a barcode",
+      "image": "http://localhost:8080/demo/arga/products-barcode/product3.png"
+    }
+  },
+
+  {
+    "@context": "http://schema.org",
+    "@type": "ARArtifact",
+    "arTarget": [{
+      "@type": "Barcode",
+      "text": "http://localhost:8080/demo/arga/products-qr/product1.html"
+    }],
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-qr/product1.html",
+      "name": "Product 1",
+      "description": "This is a dynamic result",
+      "image": "http://localhost:8080/demo/arga/products-qr/product1-qrcode.png"
+    }
+  },
+
+  {
+    "@context": "http://schema.org",
+    "@type": "ARArtifact",
+    "arTarget": [{
+      "@type": "Barcode",
+      "text": "http://localhost:8080/demo/arga/products-qr/product2.html"
+    }],
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-qr/product2.html",
+      "name": "Product 2",
+      "description": "This is a dynamic result",
+      "image": "http://localhost:8080/demo/arga/products-qr/product2-qrcode.png"
+    }
+  },
+
+  {
+    "@context": "https://schema.googleapis.com/",
+    "@type": "ARArtifact",
+    "arTarget": {
+      "@type": "Barcode",
+      "text": "012345678905"
+    },
+    "arContent": {
+      "@type": "WebPage",
+      "url": "http://localhost:8080/demo/arga/products-qr/product1.html",
+      "name": "Product 3",
+      "description": "This is a product with a barcode",
+      "image": "http://localhost:8080/demo/arga/products-qr/product1-qrcode.png"
+    }
+  }
+]

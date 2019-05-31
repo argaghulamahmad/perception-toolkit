@@ -28,6 +28,12 @@
     <link rel="stylesheet" href="/demo/common/style.css">
 
     <!--
+      Include a JSON-LD file which contains definitions for all the ARArtifacts across the site.
+      Note: this should ideally be a machine-generate file, and a copy of what is on the html content pages.
+    -->
+    <script type="application/ld+json" src="./ar-artifact-map.jsonld"></script>
+
+    <!--
       Step 2: Set up webcomponents-loader.js
     -->
     <script>
@@ -79,16 +85,16 @@
       // Note: This function gets called with each discovered URL-based Marker (such as a qr code).  If it returns
       // `true`, the toolkit will attempt to fetch and discover ARArtifacts.  The Page must still contain a valid
       // ARArtifact, with an appropriate `arTarget`.
-      shouldLoadArtifactsFrom(url) {
-        switch (url.origin) {
-          case 'http://localhost:8080':
-          case 'http://localhost:8081':
-            return true;
-
-          default:
-            return false;
-        }
-      }
+      // shouldLoadArtifactsFrom(url) {
+      //   switch (url.origin) {
+      //     case 'http://localhost:8080':
+      //     case 'http://localhost:8081':
+      //       return true;
+      //
+      //     default:
+      //       return false;
+      //   }
+      // }
     };
   </script>
   <script src="/lib/bundled/bootstrap.js"></script>
