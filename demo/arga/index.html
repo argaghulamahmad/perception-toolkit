@@ -15,7 +15,7 @@
   limitations under the License.
 -->
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="theme-color" content="#1A3230">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -37,66 +37,175 @@
       Step 2: Set up webcomponents-loader.js
     -->
     <script>
-      window.WebComponents = window.WebComponents || {};
-      window.WebComponents.root = '/node_modules/@webcomponents/webcomponentsjs/';
+        window.WebComponents = window.WebComponents || {};
+        window.WebComponents.root = '/node_modules/@webcomponents/webcomponentsjs/';
     </script>
     <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-  </head>
+</head>
 <body>
 
-  <!--
-    Step 3: Create DOM nodes for:
-    * result cards (.container)
-    * a scan button (#get-started).
-  -->
-  <div class="container"></div>
-  <button id="get-started">Get started</button>
+<!--
+  Step 3: Create DOM nodes for:
+  * result cards (.container)
+  * a scan button (#get-started).
+-->
+<div class="container"></div>
+<button id="get-started">Get started</button>
 
-  <!--
-    Step 4: Initialize Perception Toolkit
-  -->
-  <script>
-    window.PerceptionToolkit = window.PerceptionToolkit || {};
-    window.PerceptionToolkit.config = {
-      // The element to use to launch.  (Step 3, above)
-      button: document.getElementById('get-started'),
+<!-- lib idb-keyval  -->
+<script src="/third_party/idb-keyval/idb-keyval-iife.min.js"></script>
 
-      // The container for generated cards.  (Step 3, above)
-      cardContainer: document.body.querySelector('.container'),
+<!--
+  Step 4: Initialize Perception Toolkit
+-->
+<script>
+    async function init() {
+        const onboarded = await idbKeyval.get('onboarded');
+        if (!onboarded) {
+            // Store for next time.
+            await idbKeyval.set('onboarded', true);
+        }
 
-      // Whether to show the onboarding flow.
-      onboarding: true,
+        const cardContainer = document.body.querySelector('.container');
 
-      // Which images to show in carousel during onboarding
-      onboardingImages: [
-        '/demo/common/images/step1.jpg',
-        '/demo/common/images/step2.jpg',
-        '/demo/common/images/step3.jpg'
-      ],
-      
-      // Sources from which to load AR ARtifacts.  Will load after Perception init.
-      // artifactSources: [
-      //   './pages/barcode.html',
-      //   './pages/lighthouse.html'
-      // ],
-      artifactSources: [],
+        window.PerceptionToolkit = window.PerceptionToolkit || {};
+        window.PerceptionToolkit.config = {
+            // Debug level.
+            debugLevel: 'verbose',
 
-      // For URLs which are discovered, but which are not in `sitemapUrl` (above), should we attempt to fetch?
-      // Note: This function gets called with each discovered URL-based Marker (such as a qr code).  If it returns
-      // `true`, the toolkit will attempt to fetch and discover ARArtifacts.  The Page must still contain a valid
-      // ARArtifact, with an appropriate `arTarget`.
-      // shouldLoadArtifactsFrom(url) {
-      //   switch (url.origin) {
-      //     case 'http://localhost:8080':
-      //     case 'http://localhost:8081':
-      //       return true;
-      //
-      //     default:
-      //       return false;
-      //   }
-      // }
-    };
-  </script>
-  <script src="/lib/bundled/bootstrap.js"></script>
+            // The element to use to launch.  (Step 3, above)
+            button: document.getElementById('get-started'),
+
+            // The container for generated cards.  (Step 3, above)
+            cardContainer: cardContainer,
+
+            // Whether to show the onboarding flow. Note that this is superseded
+            // internally by a flag
+            onboarding: !onboarded,
+
+            // Which images to show in carousel during onboarding
+            onboardingImages: [
+                '/demo/common/images/step1.jpg',
+                '/demo/common/images/step2.jpg',
+                '/demo/common/images/step3.jpg'
+            ],
+
+            // How long after launching camera should we should instructions to user (in ms).
+            // If a result is scanned before this timeout, hint will be cancelled.
+            hintTimeout: 7000,
+
+
+            // Sources from which to load AR ARtifacts.  Will load after Perception init.
+            // artifactSources: [
+            //   './pages/barcode.html',
+            //   './pages/lighthouse.html'
+            // ],
+            artifactSources: [],
+
+            // For URLs which are discovered, but which are not in `sitemapUrl` (above), should we attempt to fetch?
+            // Note: This function gets called with each discovered URL-based Marker (such as a qr code).  If it returns
+            // `true`, the toolkit will attempt to fetch and discover ARArtifacts.  The Page must still contain a valid
+            // ARArtifact, with an appropriate `arTarget`.
+            // shouldLoadArtifactsFrom(url) {
+            //   switch (url.origin) {
+            //     case 'http://localhost:8080':
+            //     case 'http://localhost:8081':
+            //       return true;
+            //
+            //     default:
+            //       return false;
+            //   }
+            // }
+
+            onload() {
+                addEventListeners();
+            }
+        };
+
+        // When the toolkit loads, add event listeners.
+        function addEventListeners() {
+            const {Events, Elements} = window.PerceptionToolkit;
+
+            // Fires with a diff of markers found & lost.
+            window.addEventListener(Events.PerceivedResults, (evt) => {
+                const {found, lost} = evt.detail;
+
+                // First, automatically remove any "not recognized" cards if we now have content.
+                if (found.length !== 0) {
+                    const notRecognizedCard =
+                        cardContainer.querySelector('[data-not-recognized]');
+                    if (notRecognizedCard) {
+                        notRecognizedCard.remove();
+                    }
+                }
+
+                // ...If we still have any cards on screen, leave them there.
+                // Note: Alternatively, could create a carousel of results.
+                if (cardContainer.childNodes.length > 0) {
+                    return;
+                }
+
+                // If this is an unrecognized result.  Let's create an "error" card.
+                if (found.length === 0 && found.length === 0) {
+                    // Take ownership of rendering.
+                    evt.preventDefault();
+
+                    /*
+                     * Dig In here.  Customize what to do in case of error!
+                     */
+
+                    const card = new Elements.Card();
+                    card.src = 'Sorry, this item was not recognized.';
+                    card.dataset.notRecognized = true;
+                    cardContainer.appendChild(card);
+                    return;
+                }
+
+                // If this is a new result, show a custom card, in order to create a share button.
+                if (found.length > 0) {
+                    // Take ownership of rendering.
+                    evt.preventDefault();
+
+                    const card = new Elements.Card();
+                    card.src = found[0].content;
+                    cardContainer.appendChild(card);
+
+                    /*
+                    // Dig In here.  Customize the Card UI yourself!
+                    const button = new Elements.ActionButton();
+                    button.label = 'Share';
+                    button.addEventListener('click', () => {
+                      console.log('clicked');
+                      card.close();
+                    })
+                    card.appendChild(button);
+                    */
+
+                    return;
+                }
+            });
+
+            // Fires the if the user denies camera access.
+            window.addEventListener(Events.CameraAccessDenied, () => {
+                const card = new Elements.Card();
+                card.src = 'Camera unavailable or access denied';
+                cardContainer.appendChild(card);
+            });
+
+            // Fires the if the device does not have the required APIs.
+            window.addEventListener(Events.DeviceNotSupported, () => {
+                console.warn('Device Not Supported');
+            });
+        }
+
+        // Embed the toolkit.
+        const toolkit = document.createElement('script');
+        toolkit.src = '/lib/bundled/bootstrap.js';
+        document.head.appendChild(toolkit);
+    }
+
+    init();
+</script>
+<script src="/lib/bundled/bootstrap.js"></script>
 </body>
 </html>
